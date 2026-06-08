@@ -64,6 +64,9 @@
             <button class="tab-btn" data-target="recommendations-tab">
                 <i class="fa-solid fa-star"></i> Danh Sách Gợi Ý Địa Phương
             </button>
+            <button class="tab-btn" data-target="checklist-tab">
+                <i class="fa-solid fa-list-check"></i> Chuẩn Bị Hành Lý
+            </button>
         </nav>
 
         <!-- Tab Content Areas -->
@@ -146,6 +149,29 @@
                 <div class="empty-state" id="empty-state" style="display: none;">
                     <i class="fa-regular fa-folder-open"></i>
                     <p>Không tìm thấy địa điểm nào phù hợp với điều kiện lọc.</p>
+                </div>
+            </section>
+
+            <!-- Tab 3: Packing Checklist -->
+            <section id="checklist-tab" class="tab-pane">
+                <div class="checklist-progress-container">
+                    <div class="progress-info">
+                        <span class="progress-title"><i class="fa-solid fa-list-check"></i> Tiến Độ Chuẩn Bị Hành Lý</span>
+                        <span class="progress-text" id="checklist-progress-text">0/14 (0%)</span>
+                    </div>
+                    <div class="checklist-progress-bar">
+                        <div class="checklist-progress-fill" id="checklist-progress-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="checklist-grid" id="checklist-grid">
+                    <!-- Categories and Items generated dynamically by JS -->
+                </div>
+
+                <div class="checklist-actions">
+                    <button id="reset-checklist-btn" class="btn-reset">
+                        <i class="fa-solid fa-rotate-left"></i> Đặt Lại Danh Sách Mặc Định
+                    </button>
                 </div>
             </section>
 

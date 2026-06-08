@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initTabs();
     initItinerary();
     initRecommendations();
+    initChecklist();
 });
 
 // Category categorization helper for Itinerary stats & badge styling
@@ -335,4 +336,165 @@ function initRecommendations() {
 
     // Render initial grid
     renderRecommendations();
+}
+
+// 5. Packing Checklist Logic
+const DEFAULT_CHECKLIST = {
+    "Giấy tờ & Tiền tệ": [
+        { id: "c1", text: "CCCD / Hộ chiếu", checked: false },
+        { id: "c2", text: "Vé máy bay / Xác nhận đặt phòng", checked: false },
+        { id: "c3", text: "Tiền cash (tiêu vặt Chợ Cồn)", checked: false },
+        { id: "c4", text: "Thẻ ATM / Điện thoại cài ví điện tử", checked: false }
+    ],
+    "Thiết bị công nghệ": [
+        { id: "t1", text: "Điện thoại di động & cáp sạc", checked: false },
+        { id: "t2", text: "Sạc dự phòng (quan trọng khi đi cả ngày)", checked: false },
+        { id: "t3", text: "Tai nghe & gậy tự sướng", checked: false }
+    ],
+    "Trang phục & Phụ kiện": [
+        { id: "p1", text: "Giày thể thao (leo núi Ngũ Hành Sơn)", checked: false },
+        { id: "p2", text: "Đồ bơi & kính bơi (tắm biển Mỹ Khê)", checked: false },
+        { id: "p3", text: "Áo khoác mỏng (lạnh về chiều tối trên Bà Nà)", checked: false },
+        { id: "p4", text: "Mũ rộng vành, kính râm, ô/dù che nắng", checked: false }
+    ],
+    "Y tế & Mỹ phẩm": [
+        { id: "y1", text: "Kem chống nắng (Đà Nẵng nắng to tháng 6)", checked: false },
+        { id: "y2", text: "Xịt chống côn trùng / muỗi", checked: false },
+        { id: "y3", text: "Thuốc tiêu hóa, hạ sốt, băng cá nhân", checked: false }
+    ]
+};
+
+function initChecklist() {
+    const grid = document.getElementById('checklist-grid');
+    const progressText = document.getElementById('checklist-progress-text');
+    const progressFill = document.getElementById('checklist-progress-fill');
+    const resetBtn = document.getElementById('reset-checklist-btn');
+
+    let checklist = JSON.parse(localStorage.getItem('danang_checklist'));
+    if (!checklist) {
+        checklist = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+        localStorage.setItem('danang_checklist', JSON.stringify(checklist));
+    }
+
+    function saveChecklist() {
+        localStorage.setItem('danang_checklist', JSON.stringify(checklist));
+        updateProgress();
+    }
+
+    function updateProgress() {
+        let total = 0;
+        let checked = 0;
+        Object.keys(checklist).forEach(category => {
+            checklist[category].forEach(item => {
+                total++;
+                if (item.checked) checked++;
+            });
+        });
+        const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
+        progressText.innerText = `${checked}/${total} (${percent}%)`;
+        progressFill.style.width = `${percent}%`;
+    }
+
+    function renderChecklist() {
+        grid.innerHTML = '';
+        Object.keys(checklist).forEach(category => {
+            const card = document.createElement('div');
+            card.className = 'checklist-card';
+
+            const title = document.createElement('h3');
+            title.className = 'checklist-category-title';
+            title.innerText = category;
+            card.appendChild(title);
+
+            const list = document.createElement('ul');
+            list.className = 'checklist-items-list';
+
+            checklist[category].forEach(item => {
+                const li = document.createElement('li');
+                li.className = `checklist-item ${item.checked ? 'checked' : ''}`;
+
+                const label = document.createElement('label');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = item.checked;
+                checkbox.addEventListener('change', () => {
+                    item.checked = checkbox.checked;
+                    li.classList.toggle('checked', checkbox.checked);
+                    saveChecklist();
+                });
+
+                const textSpan = document.createElement('span');
+                textSpan.className = 'item-text';
+                textSpan.innerText = item.text;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn-delete-item';
+                deleteBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                deleteBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    checklist[category] = checklist[category].filter(i => i.id !== item.id);
+                    saveChecklist();
+                    renderChecklist();
+                });
+
+                label.appendChild(checkbox);
+                label.appendChild(textSpan);
+                li.appendChild(label);
+                li.appendChild(deleteBtn);
+                list.appendChild(li);
+            });
+
+            card.appendChild(list);
+
+            // Add new item input area
+            const addForm = document.createElement('div');
+            addForm.className = 'checklist-add-form';
+            
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Thêm món đồ...';
+            
+            const addBtn = document.createElement('button');
+            addBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+            
+            function addNewItem() {
+                const text = input.value.trim();
+                if (text) {
+                    const newItem = {
+                        id: 'custom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                        text: text,
+                        checked: false
+                    };
+                    checklist[category].push(newItem);
+                    saveChecklist();
+                    renderChecklist();
+                }
+            }
+
+            addBtn.addEventListener('click', addNewItem);
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addNewItem();
+                }
+            });
+
+            addForm.appendChild(input);
+            addForm.appendChild(addBtn);
+            card.appendChild(addForm);
+
+            grid.appendChild(card);
+        });
+
+        updateProgress();
+    }
+
+    resetBtn.addEventListener('click', () => {
+        if (confirm('Bạn có chắc chắn muốn đặt lại danh sách hành lý về mặc định?')) {
+            checklist = JSON.parse(JSON.stringify(DEFAULT_CHECKLIST));
+            saveChecklist();
+            renderChecklist();
+        }
+    });
+
+    renderChecklist();
 }
