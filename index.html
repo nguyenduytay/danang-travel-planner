@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đà Nẵng Travel Planner - Lịch trình & Gợi ý</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons for modern visuals -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Hero Header Banner -->
+        <header class="hero-banner" style="background-image: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.95)), url('danang_banner.png');">
+            <div class="hero-content">
+                <div class="logo-area">
+                    <span class="logo-icon"><i class="fa-solid fa-compass-drafting"></i></span>
+                    <span class="logo-text">DanangTrip</span>
+                </div>
+                <h1 class="hero-title">Hành Trình Khám Phá Đà Nẵng</h1>
+                <p class="hero-subtitle">Lịch trình chi tiết 4 Ngày 3 Đêm & Địa điểm ăn uống, vui chơi nổi tiếng</p>
+                <div class="hero-badges">
+                    <span class="hero-badge"><i class="fa-solid fa-calendar-day"></i> 4 Ngày 3 Đêm</span>
+                    <span class="hero-badge"><i class="fa-solid fa-location-dot"></i> 16 Điểm lịch trình</span>
+                    <span class="hero-badge"><i class="fa-solid fa-fire"></i> 60 Địa điểm gợi ý</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Statistics Section -->
+        <section class="stats-section">
+            <div class="stat-card spots-card">
+                <div class="stat-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                <div class="stat-info">
+                    <span class="stat-label">Tổng Địa Điểm</span>
+                    <span class="stat-value" id="total-spots">76</span>
+                </div>
+            </div>
+            <div class="stat-card category-breakdown">
+                <span class="stat-label-sub">Tỉ Lệ Danh Mục Lịch Trình</span>
+                <div class="progress-bar-container" id="category-progress">
+                    <!-- Dynamic Progress Bars -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Navigation Tabs -->
+        <nav class="main-tabs">
+            <button class="tab-btn active" data-target="itinerary-tab">
+                <i class="fa-solid fa-calendar-alt"></i> Lịch Trình Chi Tiết
+            </button>
+            <button class="tab-btn" data-target="recommendations-tab">
+                <i class="fa-solid fa-star"></i> Danh Sách Gợi Ý Địa Phương
+            </button>
+        </nav>
+
+        <!-- Tab Content Areas -->
+        <main class="content-area">
+            
+            <!-- Tab 1: Itinerary -->
+            <section id="itinerary-tab" class="tab-pane active">
+                <div class="day-selector">
+                    <button class="day-btn active" data-day="25/06/2026">
+                        <span class="day-num">Ngày 1</span>
+                        <span class="day-date">25/06</span>
+                    </button>
+                    <button class="day-btn" data-day="26/06/2026">
+                        <span class="day-num">Ngày 2</span>
+                        <span class="day-date">26/06</span>
+                    </button>
+                    <button class="day-btn" data-day="27/06/2026">
+                        <span class="day-num">Ngày 3</span>
+                        <span class="day-date">27/06</span>
+                    </button>
+                    <button class="day-btn" data-day="28/06/2026">
+                        <span class="day-num">Ngày 4</span>
+                        <span class="day-date">28/06</span>
+                    </button>
+                </div>
+
+                <!-- Timeline Container -->
+                <div class="timeline-container" id="itinerary-timeline">
+                    <!-- Generated Dynamically by JS -->
+                </div>
+            </section>
+
+            <!-- Tab 2: Recommendations -->
+            <section id="recommendations-tab" class="tab-pane">
+                <!-- Filter and Search Controls -->
+                <div class="controls-panel">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-input" placeholder="Tìm tên địa điểm, món ăn, địa chỉ...">
+                    </div>
+                    
+                    <div class="filters-row">
+                        <!-- Category Filter Buttons -->
+                        <div class="category-filters" id="category-filter-group">
+                            <button class="filter-btn active" data-category="All">Tất cả</button>
+                            <button class="filter-btn" data-category="Ăn uống">Ăn uống</button>
+                            <button class="filter-btn" data-category="Cafe">Cà phê</button>
+                            <button class="filter-btn" data-category="Check-in">Check-in</button>
+                            <button class="filter-btn" data-category="Vui chơi">Vui chơi</button>
+                        </div>
+                        
+                        <!-- Toggle TikTok Hot & Sắp Xếp -->
+                        <div class="options-group">
+                            <label class="tiktok-toggle">
+                                <input type="checkbox" id="tiktok-hot-checkbox">
+                                <span class="slider-label">
+                                    <i class="fa-brands fa-tiktok"></i> TikTok Hot 🔥
+                                </span>
+                            </label>
+                            
+                            <div class="sort-selector">
+                                <i class="fa-solid fa-sort"></i>
+                                <select id="sort-select">
+                                    <option value="default">Sắp xếp: Mặc định</option>
+                                    <option value="rating-desc">Đánh giá cao nhất</option>
+                                    <option value="price-asc">Giá: Thấp đến Cao</option>
+                                    <option value="price-desc">Giá: Cao đến Thấp</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Places Grid -->
+                <div class="places-grid" id="recommendations-grid">
+                    <!-- Generated Dynamically by JS -->
+                </div>
+                
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <i class="fa-regular fa-folder-open"></i>
+                    <p>Không tìm thấy địa điểm nào phù hợp với điều kiện lọc.</p>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p>© 2026 DanangTrip Assistant. Dữ liệu được tổng hợp từ schedule.csv.</p>
+            <p>Mẹo: Click vào bất kỳ thẻ địa điểm hoặc nút <i class="fa-solid fa-map-location-dot"></i> để mở Google Maps ngay lập tức.</p>
+        </footer>
+    </div>
+
+    <!-- Data and Application Script -->
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
