@@ -1,4 +1,11 @@
-// Application logic for Đà Nẵng Travel Planner Dashboard
+// Helper to remove Vietnamese diacritics for search matching
+function removeAccents(str) {
+    return str
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     initStats();
@@ -237,9 +244,10 @@ function initRecommendations() {
 
             // Search query check
             if (query) {
-                const nameMatch = item.name.toLowerCase().includes(query);
-                const addressMatch = item.address.toLowerCase().includes(query);
-                const reasonMatch = item.reason.toLowerCase().includes(query);
+                const cleanQuery = removeAccents(query);
+                const nameMatch = removeAccents(item.name.toLowerCase()).includes(cleanQuery);
+                const addressMatch = removeAccents(item.address.toLowerCase()).includes(cleanQuery);
+                const reasonMatch = removeAccents(item.reason.toLowerCase()).includes(cleanQuery);
                 return nameMatch || addressMatch || reasonMatch;
             }
 
