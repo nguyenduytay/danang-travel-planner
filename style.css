@@ -1095,3 +1095,73 @@ body {
         left: -25px;
     }
 }
+
+/* Contact Helper Card & Floating Button */
+.call-card .stat-icon {
+    color: var(--accent-teal);
+    background: rgba(20, 184, 166, 0.1);
+}
+.call-card:hover {
+    border-color: var(--accent-teal);
+    box-shadow: 0 0 15px rgba(20, 184, 166, 0.2);
+}
+
+.floating-call-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-cyan));
+    color: var(--text-dark);
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-full);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 8px 32px rgba(6, 182, 212, 0.3);
+    z-index: 1000;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition-smooth);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.floating-call-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 12px 40px rgba(6, 182, 212, 0.5);
+    color: var(--text-dark);
+}
+
+.floating-call-btn::after {
+    content: 'Gọi cho anh';
+    position: absolute;
+    right: 70px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-main);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: var(--transition-smooth);
+    backdrop-filter: blur(8px);
+}
+
+.floating-call-btn:hover::after {
+    opacity: 1;
+    right: 75px;
+}
+
+@media (max-width: 480px) {
+    .floating-call-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
